@@ -5,9 +5,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" />
+        {/* Este será el orden de prioridad de las rutas */}
+        <Stack.Screen name="(auth)" /> 
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="individual" />
+        <Stack.Screen name="Individual" />
       </Stack>
     </SafeAreaProvider>
   );
