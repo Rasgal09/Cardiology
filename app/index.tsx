@@ -6,5 +6,5 @@ import { Redirect } from 'expo-router';
  */
 export default function Index() {
   // Redirige directamente al Home Screen dentro del grupo (tabs).
-  return <Redirect href="/(auth)/Login" />;
+  return <Redirect href="/(tabs)/Home" />;
 }

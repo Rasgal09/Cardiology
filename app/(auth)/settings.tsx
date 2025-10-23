@@ -7,7 +7,6 @@ import {
     Share2, Info, ChevronRight 
 } from 'lucide-react-native';
 import { Colors } from '../constants/Colors';
-import Navbar from '../components/Navbar'; // Asumimos que la Navbar se muestra aquí
 
 // --- Componente de Ítem de Configuración ---
 const SettingItem = ({ title, icon: IconComponent, onPress, isLast = false }: any) => (
