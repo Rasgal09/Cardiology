@@ -66,7 +66,7 @@ export default function HomeScreen() {
       {/* --- HEADER --- */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Hola, Ricardo👋</Text>
-        <TouchableOpacity style={styles.settingsButton} onPress={() => router.push("/(auth)/Settings")}>
+        <TouchableOpacity style={styles.settingsButton} onPress={() => router.push("/(auth)/settings")}>
           <Settings size={26} color={Colors.darkGray} strokeWidth={2} /> 
         </TouchableOpacity>
       </View>
