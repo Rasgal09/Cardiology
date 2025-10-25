@@ -1,13 +1,20 @@
+// React, React Native y Expo
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Funciones y hooks
+import { useAuth } from '../context/AuthContext';
+
+// Estilos y constantes
+import { Colors } from '../constants/Colors';
+
+// Librerías
 import { 
     ArrowLeft, LogOut, Mail, Lock, Bell, CheckCircle, 
     Share2, Info, ChevronRight 
 } from 'lucide-react-native';
-import { Colors } from '../constants/Colors';
-import Navbar from '../components/Navbar'; // Asumimos que la Navbar se muestra aquí
 
 // --- Componente de Ítem de Configuración ---
 const SettingItem = ({ title, icon: IconComponent, onPress, isLast = false }: any) => (
@@ -23,6 +30,7 @@ const SettingItem = ({ title, icon: IconComponent, onPress, isLast = false }: an
 // --- COMPONENTE PRINCIPAL ---
 export default function SettingsScreen() {
     const router = useRouter();
+    const { logout } = useAuth();
 
     // ------------------------------------------
     // FUNCIONES DE MANEJO DE DATOS (PREPARADAS)
@@ -53,12 +61,7 @@ export default function SettingsScreen() {
                 {
                     text: 'Cerrar Sesión',
                     onPress: async () => {
-                        // COMENTARIO: Aquí es donde limpiamos el token de autenticación.
-                        // EJEMPLO DE LÓGICA (Aún no funcional):
-                        // await AsyncStorage.removeItem('userToken'); // ⬅️ LÓGICA DE ALMACENAMIENTO DE TOKENS
-                        // await firebase.auth().signOut(); // ⬅️ LÓGICA DE AUTENTICACIÓN (Firebase, etc.)
-
-                        // Después de cerrar sesión, redirigimos al login (o a la raíz si el layout maneja la redirección).
+                        await logout();
                         router.replace('/(auth)/Login');
                     },
                     style: 'destructive',

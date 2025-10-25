@@ -1,10 +1,19 @@
+// React, React Native y Expo
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Componentes
 import Button from '../components/Button';
 import Input from '../components/Input';
 import StethoscopeLogo from '../components/Logo';
+
+// Funciones y hooks
+import { loginWeb, loginMobile } from '../lib/auth';
+import { useAuth } from '../context/AuthContext';
+
+// Estilos
 import { Colors } from '../constants/Colors';
 
 export default function LoginScreen() {
@@ -12,9 +21,24 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Navegar a Home después del login
-    router.replace('/(tabs)/Home');
+  const { login } = useAuth();
+
+  const handleLogin = async () => {
+    const formData = new FormData();
+    formData.append("username", email);
+    formData.append("password", password);
+
+    if( Platform.OS === "web"){
+      const user = await loginWeb(formData);
+      login(user);
+      router.replace("/(tabs)/Home");
+      return;
+    } else {
+      const user = await loginMobile(formData);
+      login(user);
+      router.replace("/(tabs)/Home");
+      return;
+    }
   };
 
   return (

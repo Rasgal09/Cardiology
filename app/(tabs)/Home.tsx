@@ -1,11 +1,17 @@
-import { LinearGradient } from 'expo-linear-gradient';
+// Expo, react y React Native
 import { useRouter } from 'expo-router';
-import { AlertTriangle, Heart, HeartPulse, History, Settings, Siren } from 'lucide-react-native';
-import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; // Importado useSafeAreaInsets
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
+import { useAuth } from '../context/AuthContext';
+
+// Componentes
 import Navbar from '../components/Navbar';
 import { Colors } from '../constants/Colors';
+
+// Librerías
+import { AlertTriangle, Heart, HeartPulse, History, Settings, Siren } from 'lucide-react-native';
 
 // --- Componente para las tarjetas secundarias (blancas) ---
 const CardItem = ({ title, buttonText, onPress, icon: IconComponent, buttonColor = Colors.primary }: any) => (
@@ -48,16 +54,19 @@ const DisclaimerBanner = () => (
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
   
   const NAVBAR_HEIGHT = 65; 
   const safePaddingBottom = NAVBAR_HEIGHT + (insets.bottom || 0) + 20; 
+
+  console.log("Usuario en HomeScreen:", user);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* --- HEADER --- */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Hola, Ricardo👋</Text>
-        <TouchableOpacity style={styles.settingsButton} onPress={() => router.push('/settings')}>
+        <TouchableOpacity style={styles.settingsButton} onPress={() => router.push("/(auth)/Settings")}>
           <Settings size={26} color={Colors.darkGray} strokeWidth={2} /> 
         </TouchableOpacity>
       </View>
