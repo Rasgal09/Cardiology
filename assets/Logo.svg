@@ -1,4 +1,3 @@
-import * as React from "react"
 import Svg, {
   G,
   Path,
@@ -11,8 +10,8 @@ import Svg, {
 const SvgComponent = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    width={209}
-    height={207}
+    width={581}
+    height={537}
     fill="none"
     {...props}
   >
@@ -21,54 +20,54 @@ const SvgComponent = (props) => (
         stroke="url(#b)"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth={7}
-        d="M99.316 20v16.737M49.106 20v16.737m0-8.369h-8.37A16.737 16.737 0 0 0 24 45.105V78.58a50.21 50.21 0 0 0 50.21 50.21m0 0a50.213 50.213 0 0 0 50.211-50.21V45.105a16.736 16.736 0 0 0-16.737-16.737h-8.368M74.21 128.79A50.213 50.213 0 0 0 124.421 179a50.21 50.21 0 0 0 50.211-50.211"
+        strokeWidth={22}
+        d="M256 27v50M106 27v50m0-25H81a50 50 0 0 0-50 50v100a150 150 0 0 0 150 150m0 0a150.002 150.002 0 0 0 150-150V102a50 50 0 0 0-50-50h-25m-75 300a150.002 150.002 0 0 0 150 150 150.002 150.002 0 0 0 150-150"
         shapeRendering="crispEdges"
       />
     </G>
-    <Ellipse cx={151.416} cy={83.14} fill="url(#c)" rx={3.239} ry={3.222} />
-    <Ellipse cx={158.975} cy={83.14} fill="url(#d)" rx={3.239} ry={3.222} />
-    <Ellipse cx={144.397} cy={90.657} fill="url(#e)" rx={3.239} ry={3.222} />
-    <Ellipse cx={151.956} cy={90.657} fill="url(#f)" rx={3.239} ry={3.222} />
-    <Ellipse cx={159.515} cy={90.657} fill="url(#g)" rx={3.239} ry={3.222} />
-    <Ellipse cx={167.073} cy={90.657} fill="url(#h)" rx={3.239} ry={3.222} />
-    <Ellipse cx={189.209} cy={83.14} fill="url(#i)" rx={3.239} ry={3.222} />
-    <Ellipse cx={196.767} cy={83.14} fill="url(#j)" rx={3.239} ry={3.222} />
-    <Ellipse cx={182.19} cy={90.657} fill="url(#k)" rx={3.239} ry={3.222} />
-    <Ellipse cx={189.749} cy={90.657} fill="url(#l)" rx={3.239} ry={3.222} />
-    <Ellipse cx={197.307} cy={90.657} fill="url(#m)" rx={3.239} ry={3.222} />
-    <Ellipse cx={204.866} cy={90.657} fill="url(#n)" rx={3.239} ry={3.222} />
-    <Ellipse cx={144.397} cy={98.175} fill="url(#o)" rx={3.239} ry={3.222} />
-    <Ellipse cx={151.956} cy={98.175} fill="url(#p)" rx={3.239} ry={3.222} />
-    <Ellipse cx={159.515} cy={98.175} fill="url(#q)" rx={3.239} ry={3.222} />
-    <Ellipse cx={167.073} cy={98.175} fill="url(#r)" rx={3.239} ry={3.222} />
-    <Ellipse cx={182.19} cy={98.175} fill="url(#s)" rx={3.239} ry={3.222} />
-    <Ellipse cx={189.749} cy={98.175} fill="url(#t)" rx={3.239} ry={3.222} />
-    <Ellipse cx={197.307} cy={98.175} fill="url(#u)" rx={3.239} ry={3.222} />
-    <Ellipse cx={204.866} cy={98.175} fill="url(#v)" rx={3.239} ry={3.222} />
-    <Ellipse cx={174.631} cy={98.175} fill="url(#w)" rx={3.239} ry={3.222} />
-    <Ellipse cx={151.956} cy={105.693} fill="url(#x)" rx={3.239} ry={3.222} />
-    <Ellipse cx={159.515} cy={105.693} fill="url(#y)" rx={3.239} ry={3.222} />
-    <Ellipse cx={167.073} cy={105.693} fill="url(#z)" rx={3.239} ry={3.222} />
-    <Ellipse cx={182.19} cy={105.693} fill="url(#A)" rx={3.239} ry={3.222} />
-    <Ellipse cx={189.749} cy={105.693} fill="url(#B)" rx={3.239} ry={3.222} />
-    <Ellipse cx={197.307} cy={105.693} fill="url(#C)" rx={3.239} ry={3.222} />
-    <Ellipse cx={174.631} cy={105.693} fill="url(#D)" rx={3.239} ry={3.222} />
-    <Ellipse cx={159.515} cy={113.21} fill="url(#E)" rx={3.239} ry={3.222} />
-    <Ellipse cx={167.073} cy={113.21} fill="url(#F)" rx={3.239} ry={3.222} />
-    <Ellipse cx={182.19} cy={113.21} fill="url(#G)" rx={3.239} ry={3.222} />
-    <Ellipse cx={189.749} cy={113.21} fill="url(#H)" rx={3.239} ry={3.222} />
-    <Ellipse cx={174.631} cy={113.21} fill="url(#I)" rx={3.239} ry={3.222} />
-    <Ellipse cx={167.073} cy={120.728} fill="url(#J)" rx={3.239} ry={3.222} />
-    <Ellipse cx={182.19} cy={120.728} fill="url(#K)" rx={3.239} ry={3.222} />
-    <Ellipse cx={174.631} cy={120.728} fill="url(#L)" rx={3.239} ry={3.222} />
+    <Ellipse cx={411.645} cy={215.625} fill="url(#c)" rx={9.677} ry={9.625} />
+    <Ellipse cx={434.226} cy={215.625} fill="url(#d)" rx={9.677} ry={9.625} />
+    <Ellipse cx={390.677} cy={238.083} fill="url(#e)" rx={9.677} ry={9.625} />
+    <Ellipse cx={413.258} cy={238.083} fill="url(#f)" rx={9.677} ry={9.625} />
+    <Ellipse cx={435.839} cy={238.083} fill="url(#g)" rx={9.677} ry={9.625} />
+    <Ellipse cx={458.419} cy={238.083} fill="url(#h)" rx={9.677} ry={9.625} />
+    <Ellipse cx={524.549} cy={215.625} fill="url(#i)" rx={9.677} ry={9.625} />
+    <Ellipse cx={547.129} cy={215.625} fill="url(#j)" rx={9.677} ry={9.625} />
+    <Ellipse cx={503.581} cy={238.083} fill="url(#k)" rx={9.677} ry={9.625} />
+    <Ellipse cx={526.161} cy={238.083} fill="url(#l)" rx={9.677} ry={9.625} />
+    <Ellipse cx={548.742} cy={238.083} fill="url(#m)" rx={9.677} ry={9.625} />
+    <Ellipse cx={571.322} cy={238.083} fill="url(#n)" rx={9.677} ry={9.625} />
+    <Ellipse cx={390.677} cy={260.542} fill="url(#o)" rx={9.677} ry={9.625} />
+    <Ellipse cx={413.258} cy={260.542} fill="url(#p)" rx={9.677} ry={9.625} />
+    <Ellipse cx={435.839} cy={260.542} fill="url(#q)" rx={9.677} ry={9.625} />
+    <Ellipse cx={458.419} cy={260.542} fill="url(#r)" rx={9.677} ry={9.625} />
+    <Ellipse cx={503.581} cy={260.542} fill="url(#s)" rx={9.677} ry={9.625} />
+    <Ellipse cx={526.161} cy={260.542} fill="url(#t)" rx={9.677} ry={9.625} />
+    <Ellipse cx={548.742} cy={260.542} fill="url(#u)" rx={9.677} ry={9.625} />
+    <Ellipse cx={571.322} cy={260.542} fill="url(#v)" rx={9.677} ry={9.625} />
+    <Ellipse cx={481} cy={260.542} fill="url(#w)" rx={9.677} ry={9.625} />
+    <Ellipse cx={413.258} cy={283} fill="url(#x)" rx={9.677} ry={9.625} />
+    <Ellipse cx={435.839} cy={283} fill="url(#y)" rx={9.677} ry={9.625} />
+    <Ellipse cx={458.419} cy={283} fill="url(#z)" rx={9.677} ry={9.625} />
+    <Ellipse cx={503.581} cy={283} fill="url(#A)" rx={9.677} ry={9.625} />
+    <Ellipse cx={526.161} cy={283} fill="url(#B)" rx={9.677} ry={9.625} />
+    <Ellipse cx={548.742} cy={283} fill="url(#C)" rx={9.677} ry={9.625} />
+    <Ellipse cx={481} cy={283} fill="url(#D)" rx={9.677} ry={9.625} />
+    <Ellipse cx={435.839} cy={305.458} fill="url(#E)" rx={9.677} ry={9.625} />
+    <Ellipse cx={458.419} cy={305.458} fill="url(#F)" rx={9.677} ry={9.625} />
+    <Ellipse cx={503.581} cy={305.458} fill="url(#G)" rx={9.677} ry={9.625} />
+    <Ellipse cx={526.161} cy={305.458} fill="url(#H)" rx={9.677} ry={9.625} />
+    <Ellipse cx={481} cy={305.458} fill="url(#I)" rx={9.677} ry={9.625} />
+    <Ellipse cx={458.419} cy={327.917} fill="url(#J)" rx={9.677} ry={9.625} />
+    <Ellipse cx={503.581} cy={327.917} fill="url(#K)" rx={9.677} ry={9.625} />
+    <Ellipse cx={481} cy={327.917} fill="url(#L)" rx={9.677} ry={9.625} />
     <Defs>
       <LinearGradient
         id="b"
-        x1={107.684}
-        x2={107.684}
-        y1={20}
-        y2={179}
+        x1={281}
+        x2={281}
+        y1={27}
+        y2={502}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -76,10 +75,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="c"
-        x1={151.416}
-        x2={151.416}
-        y1={79.918}
-        y2={86.362}
+        x1={411.645}
+        x2={411.645}
+        y1={206}
+        y2={225.25}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -87,10 +86,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="d"
-        x1={158.974}
-        x2={158.974}
-        y1={79.918}
-        y2={86.362}
+        x1={434.226}
+        x2={434.226}
+        y1={206}
+        y2={225.25}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -98,10 +97,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="e"
-        x1={144.397}
-        x2={144.397}
-        y1={87.436}
-        y2={93.879}
+        x1={390.677}
+        x2={390.677}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -109,10 +108,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="f"
-        x1={151.956}
-        x2={151.956}
-        y1={87.436}
-        y2={93.879}
+        x1={413.258}
+        x2={413.258}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -120,10 +119,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="g"
-        x1={159.515}
-        x2={159.515}
-        y1={87.436}
-        y2={93.879}
+        x1={435.839}
+        x2={435.839}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -131,10 +130,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="h"
-        x1={167.073}
-        x2={167.073}
-        y1={87.436}
-        y2={93.879}
+        x1={458.419}
+        x2={458.419}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -142,10 +141,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="i"
-        x1={189.209}
-        x2={189.209}
-        y1={79.918}
-        y2={86.362}
+        x1={524.549}
+        x2={524.549}
+        y1={206}
+        y2={225.25}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -153,10 +152,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="j"
-        x1={196.767}
-        x2={196.767}
-        y1={79.918}
-        y2={86.362}
+        x1={547.129}
+        x2={547.129}
+        y1={206}
+        y2={225.25}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -164,10 +163,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="k"
-        x1={182.19}
-        x2={182.19}
-        y1={87.436}
-        y2={93.879}
+        x1={503.581}
+        x2={503.581}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -175,10 +174,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="l"
-        x1={189.749}
-        x2={189.749}
-        y1={87.436}
-        y2={93.879}
+        x1={526.161}
+        x2={526.161}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -186,10 +185,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="m"
-        x1={197.307}
-        x2={197.307}
-        y1={87.436}
-        y2={93.879}
+        x1={548.742}
+        x2={548.742}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -197,10 +196,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="n"
-        x1={204.866}
-        x2={204.866}
-        y1={87.436}
-        y2={93.879}
+        x1={571.322}
+        x2={571.322}
+        y1={228.458}
+        y2={247.708}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -208,10 +207,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="o"
-        x1={144.397}
-        x2={144.397}
-        y1={94.953}
-        y2={101.397}
+        x1={390.677}
+        x2={390.677}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -219,10 +218,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="p"
-        x1={151.956}
-        x2={151.956}
-        y1={94.953}
-        y2={101.397}
+        x1={413.258}
+        x2={413.258}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -230,10 +229,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="q"
-        x1={159.515}
-        x2={159.515}
-        y1={94.953}
-        y2={101.397}
+        x1={435.839}
+        x2={435.839}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -241,10 +240,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="r"
-        x1={167.073}
-        x2={167.073}
-        y1={94.953}
-        y2={101.397}
+        x1={458.419}
+        x2={458.419}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -252,10 +251,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="s"
-        x1={182.19}
-        x2={182.19}
-        y1={94.953}
-        y2={101.397}
+        x1={503.581}
+        x2={503.581}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -263,10 +262,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="t"
-        x1={189.749}
-        x2={189.749}
-        y1={94.953}
-        y2={101.397}
+        x1={526.161}
+        x2={526.161}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -274,10 +273,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="u"
-        x1={197.307}
-        x2={197.307}
-        y1={94.953}
-        y2={101.397}
+        x1={548.742}
+        x2={548.742}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -285,10 +284,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="v"
-        x1={204.866}
-        x2={204.866}
-        y1={94.953}
-        y2={101.397}
+        x1={571.322}
+        x2={571.322}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -296,10 +295,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="w"
-        x1={174.631}
-        x2={174.631}
-        y1={94.953}
-        y2={101.397}
+        x1={481}
+        x2={481}
+        y1={250.917}
+        y2={270.167}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -307,10 +306,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="x"
-        x1={151.956}
-        x2={151.956}
-        y1={102.471}
-        y2={108.914}
+        x1={413.258}
+        x2={413.258}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -318,10 +317,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="y"
-        x1={159.515}
-        x2={159.515}
-        y1={102.471}
-        y2={108.914}
+        x1={435.839}
+        x2={435.839}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -329,10 +328,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="z"
-        x1={167.073}
-        x2={167.073}
-        y1={102.471}
-        y2={108.914}
+        x1={458.419}
+        x2={458.419}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -340,10 +339,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="A"
-        x1={182.19}
-        x2={182.19}
-        y1={102.471}
-        y2={108.914}
+        x1={503.581}
+        x2={503.581}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -351,10 +350,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="B"
-        x1={189.749}
-        x2={189.749}
-        y1={102.471}
-        y2={108.914}
+        x1={526.161}
+        x2={526.161}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -362,10 +361,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="C"
-        x1={197.307}
-        x2={197.307}
-        y1={102.471}
-        y2={108.914}
+        x1={548.742}
+        x2={548.742}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -373,10 +372,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="D"
-        x1={174.631}
-        x2={174.631}
-        y1={102.471}
-        y2={108.914}
+        x1={481}
+        x2={481}
+        y1={273.375}
+        y2={292.625}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -384,10 +383,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="E"
-        x1={159.515}
-        x2={159.515}
-        y1={109.988}
-        y2={116.432}
+        x1={435.839}
+        x2={435.839}
+        y1={295.833}
+        y2={315.083}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -395,10 +394,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="F"
-        x1={167.073}
-        x2={167.073}
-        y1={109.988}
-        y2={116.432}
+        x1={458.419}
+        x2={458.419}
+        y1={295.833}
+        y2={315.083}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -406,10 +405,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="G"
-        x1={182.19}
-        x2={182.19}
-        y1={109.988}
-        y2={116.432}
+        x1={503.581}
+        x2={503.581}
+        y1={295.833}
+        y2={315.083}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -417,10 +416,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="H"
-        x1={189.749}
-        x2={189.749}
-        y1={109.988}
-        y2={116.432}
+        x1={526.161}
+        x2={526.161}
+        y1={295.833}
+        y2={315.083}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -428,10 +427,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="I"
-        x1={174.631}
-        x2={174.631}
-        y1={109.988}
-        y2={116.432}
+        x1={481}
+        x2={481}
+        y1={295.833}
+        y2={315.083}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -439,10 +438,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="J"
-        x1={167.073}
-        x2={167.073}
-        y1={117.506}
-        y2={123.95}
+        x1={458.419}
+        x2={458.419}
+        y1={318.292}
+        y2={337.542}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -450,10 +449,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="K"
-        x1={182.19}
-        x2={182.19}
-        y1={117.506}
-        y2={123.95}
+        x1={503.581}
+        x2={503.581}
+        y1={318.292}
+        y2={337.542}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -461,10 +460,10 @@ const SvgComponent = (props) => (
       </LinearGradient>
       <LinearGradient
         id="L"
-        x1={174.631}
-        x2={174.631}
-        y1={117.506}
-        y2={123.95}
+        x1={481}
+        x2={481}
+        y1={318.292}
+        y2={337.542}
         gradientUnits="userSpaceOnUse"
       >
         <Stop stopColor="#F44336" />
@@ -473,4 +472,4 @@ const SvgComponent = (props) => (
     </Defs>
   </Svg>
 )
-export default Logo;
+export default SvgComponent
