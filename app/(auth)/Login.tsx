@@ -88,6 +88,12 @@ export default function LoginScreen() {
 
     if( Platform.OS === "web"){
       const user = await loginWeb(formData);
+
+      if(user.detail){
+        alert("Error al iniciar sesión: " + user.detail);
+        return;
+      }
+
       login(user);
       router.replace("/(tabs)/Home");
       return;

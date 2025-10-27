@@ -21,7 +21,7 @@ export const loginWeb = async(formData: FormData) => {
     if (!response.ok) {
       const errorData = await response.json(); 
       console.error(errorData);
-      return false;
+      return errorData;
     }
 
     const userData = await fetch(`${process.env.EXPO_PUBLIC_URL_BACK}/auth/users/me`, {
@@ -32,7 +32,7 @@ export const loginWeb = async(formData: FormData) => {
     if (!userData.ok) {
       const errorData = await userData.json();
       console.error(errorData);
-      return false;
+      return errorData;
     }
 
     const user = await userData.json();
