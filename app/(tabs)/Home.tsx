@@ -1,262 +1,295 @@
+// Home.tsx (Solo la parte exportada y los estilos del scroll han cambiado)
+
+"use client"
+
 // Expo, react y React Native
-import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useRouter } from "expo-router"
+import { LinearGradient } from "expo-linear-gradient"
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import React from "react"
+// import { useAuth } from "../context/AuthContext" // Comentado si no se usa
 
 // Componentes
-import Navbar from '../components/Navbar';
-import { Colors } from '../constants/Colors';
+import Navbar from "../components/Navbar"
+import { Colors } from "../constants/Colors"
 
 // Librerías
-import { AlertTriangle, Heart, HeartPulse, History, Settings, Siren } from 'lucide-react-native';
+import { AlertTriangle, Heart, HeartPulse, History, Settings, Siren, ChevronRight } from "lucide-react-native"
 
 // --- Componente para las tarjetas secundarias (blancas) ---
 const CardItem = ({ title, buttonText, onPress, icon: IconComponent, buttonColor = Colors.primary }: any) => (
-  <TouchableOpacity style={styles.cardSecondary} onPress={onPress} activeOpacity={0.7}>
-    <View style={styles.cardSecondaryContent}>
-        
-        {/* Ícono a la izquierda con el color primario (rojo) */}
-        <View style={styles.iconContainer}>
-          <IconComponent size={30} color={Colors.primary} strokeWidth={2} />
-        </View>
+  <TouchableOpacity style={styles.cardSecondary} onPress={onPress} activeOpacity={0.7}>
+    <View style={styles.cardSecondaryContent}>
+      {/* Ícono a la izquierda con fondo circular */}
+      <View style={styles.iconContainer}>
+        <IconComponent size={26} color={Colors.primary} strokeWidth={2.5} />
+      </View>
 
-        {/* Texto de la tarjeta */}
-        <View style={styles.cardSecondaryTextContainer}>
-          <Text style={styles.cardSecondaryTitle}>{title}</Text>
-        </View>
+      {/* Texto de la tarjeta */}
+      <View style={styles.cardSecondaryTextContainer}>
+        <Text style={styles.cardSecondaryTitle}>{title}</Text>
+      </View>
 
-        {/* Botón de acción con contorno */}
-        <TouchableOpacity 
-          style={[styles.cardSecondaryButton, { borderColor: buttonColor }]} 
-          onPress={onPress}
-        >
-          <Text style={[styles.cardSecondaryButtonText, { color: buttonColor }]}>{buttonText}</Text>
-        </TouchableOpacity>
-
-      </View>
-    </TouchableOpacity>
-);
+      {/* Flecha indicadora */}
+      <ChevronRight size={22} color="#999" strokeWidth={2.5} />
+    </View>
+  </TouchableOpacity>
+)
 
 // --- Componente de Advertencia (Disclaimer) ---
 const DisclaimerBanner = () => (
-    <View style={styles.disclaimerContainer}>
-        <AlertTriangle size={20} color={'#FFC107'} />
-        <Text style={styles.disclaimerText}>
-            Esta aplicación no sustituye el diagnóstico ni la consulta de un profesional médico. 
-            Utiliza la información como referencia.
-        </Text>
-    </View>
-);
+  <View style={styles.disclaimerContainer}>
+    <View style={styles.disclaimerIconContainer}>
+      <AlertTriangle size={22} color={"#F59E0B"} strokeWidth={2.5} />
+    </View>
+    <Text style={styles.disclaimerText}>
+      Esta aplicación no sustituye el diagnóstico ni la consulta de un profesional médico. Utiliza la información como
+      referencia.
+    </Text>
+  </View>
+)
 
 export default function HomeScreen() {
-  const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const { user } = useAuth();
-  
-  const NAVBAR_HEIGHT = 65; 
-  const safePaddingBottom = NAVBAR_HEIGHT + (insets.bottom || 0) + 20; 
+  const router = useRouter()
+  const insets = useSafeAreaInsets()
+  // const { user } = useAuth(); 
 
-  console.log("Usuario en HomeScreen:", user);
+  // ELIMINAMOS el cálculo excesivo de NAVBAR_HEIGHT y safePaddingBottom
+  const bottomPaddingForNavbar = 20 + (insets.bottom || 0); 
+  // Ahora el padding es solo el espacio de seguridad + un pequeño margen
 
-  return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* --- HEADER --- */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Hola, Ricardo👋</Text>
-        <TouchableOpacity style={styles.settingsButton} onPress={() => router.push("/(auth)/settings")}>
-          <Settings size={26} color={Colors.darkGray} strokeWidth={2} /> 
-        </TouchableOpacity>
-      </View>
+  const today = new Date().toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  })
 
-      <ScrollView 
-        style={styles.content} 
-        contentContainerStyle={[
-            styles.scrollContent, 
-            { paddingBottom: safePaddingBottom } // Aplicamos el padding dinámico
-        ]}
-      >
-        
-        {/* --- TARJETA PRINCIPAL (ROJA GRANDE) --- */}
-        <TouchableOpacity style={styles.mainCard} onPress={() => router.push('/(tabs)/Scanner')}>
-            <LinearGradient
-                colors={[Colors.primary, Colors.primaryDark]}
-                start={{ x: 0.5, y: 0 }}
-                end={{ x: 0.5, y: 1 }}
-                style={styles.mainCardGradient}
-            >
-                <HeartPulse size={40} color={Colors.white} strokeWidth={2.5} style={{marginBottom: 12}}/>
-                
-                <Text style={styles.mainCardTitle}>Comenzar{'\n'}Mediciones Hoy</Text>
-                <Text style={styles.mainCardSubtitle}>Toma tu pulso y presión arterial.</Text>
-            </LinearGradient>
-        </TouchableOpacity>
-        
-        {/* --- SECCIÓN Otras Opciones --- */}
-        <Text style={styles.sectionTitle}>Otras Opciones</Text>
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* --- HEADER --- */}
+      <View style={styles.header}>
+        {/* Lado Izquierdo: Mensaje de Bienvenida y Subtítulo */}
+        <View style={styles.headerTextGroup}>
+          <Text style={styles.headerSubtitle}>Hoy es {today}</Text>
+          <Text style={styles.headerTitleImproved}>Hola, Ricardo 👋</Text>
+        </View>
 
-        {/* Tarjetas Secundarias */}
-        <CardItem
-          title="Historial de Mediciones"
-          buttonText="Ver"
-          onPress={() => router.push('/(tabs)/Historial')}
-          icon={History}
-        />
-        <CardItem
-          title="Cuidados del Corazón"
-          buttonText="Consejos"
-          onPress={() => router.push('/(tabs)/Care')}
-          icon={Heart}
-        />
-        <CardItem
-          title="Emergencia Rápida"
-          buttonText="Activar"
-          onPress={() => router.push('/(tabs)/Emergency')}
-          icon={Siren}
-        />
-        
-        {/* --- BANNER DE ADVERTENCIA --- */}
-        <DisclaimerBanner />
+        {/* Lado Derecho: Botón de Ajustes Mejorado */}
+        <TouchableOpacity
+          style={styles.settingsButtonImproved}
+          onPress={() => router.push("/(tabs)/settings")}
+          activeOpacity={0.7}
+        >
+          <Settings size={22} color={Colors.darkGray} strokeWidth={2} />
+        </TouchableOpacity>
+      </View>
 
-      </ScrollView>
+      <ScrollView
+        style={styles.content}
+        // USAMOS el nuevo cálculo de relleno más simple
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: bottomPaddingForNavbar }]}
+      >
+        {/* --- TARJETA PRINCIPAL (ROJA GRANDE) --- */}
+        <TouchableOpacity style={styles.mainCard} onPress={() => router.push("/(tabs)/Scanner")} activeOpacity={0.9}>
+          <LinearGradient
+            colors={[Colors.primary, Colors.primaryDark]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.mainCardGradient}
+          >
+            <View style={styles.mainCardIconContainer}>
+              <HeartPulse size={48} color={Colors.white} strokeWidth={2.5} />
+            </View>
 
-      <Navbar /> 
-    </SafeAreaView>
-  );
+            <Text style={styles.mainCardTitle}>Comenzar{"\n"}Mediciones Hoy</Text>
+            <Text style={styles.mainCardSubtitle}>Toma tu pulso y presión arterial en segundos.</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        {/* --- SECCIÓN Otras Opciones --- */}
+        <Text style={styles.sectionTitle}>Otras Opciones</Text>
+
+        {/* Tarjetas Secundarias */}
+        <CardItem
+          title="Historial de Mediciones"
+          buttonText="Ver"
+          onPress={() => router.push("/(tabs)/Historial")}
+          icon={History}
+        />
+        <CardItem
+          title="Cuidados del Corazón"
+          buttonText="Consejos"
+          onPress={() => router.push("/(tabs)/Care")}
+          icon={Heart}
+        />
+        <CardItem
+          title="Emergencia Rápida"
+          buttonText="Activar"
+          onPress={() => router.push("/(tabs)/Emergency")}
+          icon={Siren}
+        />
+
+        {/* --- BANNER DE ADVERTENCIA --- */}
+        <DisclaimerBanner />
+      </ScrollView>
+
+      <Navbar />
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F5F5', 
-  },
-  // --- HEADER ---
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15, 
-    backgroundColor: Colors.white,
-  },
-  headerTitle: {
-    fontSize: 22, 
-    fontWeight: '700',
-    color: '#333',
-  },
-  settingsButton: {
-    padding: 4, 
-  },
-  content: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 24, 
-  },
-  
-  // --- Tarjeta Principal (Grande y Roja) ---
-  mainCard: {
-    borderRadius: 20, 
-    marginTop: 10,
-    marginBottom: 25, 
-    overflow: 'hidden',
-    elevation: 8, 
-    shadowColor: Colors.primaryDark, 
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
-  },
-  mainCardGradient: {
-    padding: 30, 
-    height: 190, 
-    justifyContent: 'center',
-  },
-  mainCardTitle: {
-    fontSize: 26, 
-    fontWeight: '800',
-    color: Colors.white,
-    lineHeight: 32,
-  },
-  mainCardSubtitle: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: 'rgba(255,255,255,0.95)',
-    marginTop: 8,
-  },
-  
-  // --- Título de Sección ---
-  sectionTitle: {
-    fontSize: 20, 
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 15,
-    marginTop: 5,
-  },
+  container: {
+    flex: 1,
+    backgroundColor: "#F8F9FA",
+  },
+  // --- HEADER ---
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
+  },
+  headerTextGroup: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#666",
+    marginBottom: 4,
+  },
+  headerTitleImproved: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#1A1A1A",
+    letterSpacing: 0.3,
+  },
+  settingsButtonImproved: {
+    padding: 8,
+    backgroundColor: "#F5F5F5",
+    borderRadius: 12,
+  },
+  content: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    // Eliminamos paddingBottom aquí, ya que será calculado dinámicamente arriba.
+  },
 
-  // --- Tarjetas Secundarias (Lista Blanca) ---
-  cardSecondary: {
-    backgroundColor: Colors.white,
-    borderRadius: 15, 
-    marginBottom: 15,
-    overflow: 'hidden',
-    elevation: 3, 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-  },
-  cardSecondaryContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 18, 
-    paddingHorizontal: 18,
-  },
-  iconContainer: {
-    marginRight: 15,
-    padding: 5,
-  },
-  cardSecondaryTextContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  cardSecondaryTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#333',
-  },
-  // Estilo del botón (Ver/Consejos/Activar)
-  cardSecondaryButton: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 18,
-    paddingVertical: 10, 
-    borderRadius: 10,
-    borderWidth: 1.5, 
-    alignSelf: 'center',
-  },
-  cardSecondaryButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-  },
+  // --- Tarjeta Principal (Grande y Roja) ---
+  mainCard: {
+    borderRadius: 24,
+    marginBottom: 32,
+    overflow: "hidden",
+    elevation: 12,
+    shadowColor: Colors.primaryDark,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+  },
+  mainCardGradient: {
+    padding: 32,
+    minHeight: 220,
+    justifyContent: "center",
+  },
+  mainCardIconContainer: {
+    marginBottom: 16,
+  },
+  mainCardTitle: {
+    fontSize: 32,
+    fontWeight: "800",
+    color: Colors.white,
+    lineHeight: 38,
+    letterSpacing: 0.5,
+    marginBottom: 8,
+  },
+  mainCardSubtitle: {
+    fontSize: 15,
+    fontWeight: "500",
+    color: "rgba(255,255,255,0.95)",
+    letterSpacing: 0.3,
+    lineHeight: 22,
+  },
 
-  // --- BANNER DE ADVERTENCIA ---
-  disclaimerContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: '#FFFBE6', 
-    borderLeftWidth: 4,
-    borderLeftColor: '#FFC107', 
-    marginTop: 20,
-  },
-  disclaimerText: {
-    flex: 1,
-    fontSize: 12,
-    color: '#666',
-    marginLeft: 10,
-    lineHeight: 18,
-  }
-});
+  // --- Título de Sección ---
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A1A1A",
+    marginBottom: 16,
+    letterSpacing: 0.3,
+  },
+
+  // --- Tarjetas Secundarias (Lista Blanca) ---
+  cardSecondary: {
+    backgroundColor: Colors.white,
+    borderRadius: 18,
+    marginBottom: 14,
+    overflow: "hidden",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: "#F0F0F0",
+  },
+  cardSecondaryContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+  },
+  iconContainer: {
+    marginRight: 16,
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    backgroundColor: "rgba(244, 67, 54, 0.08)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardSecondaryTextContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  cardSecondaryTitle: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    letterSpacing: 0.2,
+  },
+
+  // --- BANNER DE ADVERTENCIA ---
+  disclaimerContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#FFFBE6",
+    borderLeftWidth: 4,
+    borderLeftColor: "#FFC107",
+    marginTop: 20,
+  },
+  disclaimerIconContainer: {
+    marginRight: 12,
+    marginTop: 2,
+  },
+  disclaimerText: {
+    flex: 1,
+    fontSize: 12,
+    color: "#666",
+    marginLeft: 10,
+    lineHeight: 18,
+    textAlign: "left",
+  },
+})

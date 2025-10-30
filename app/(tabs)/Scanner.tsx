@@ -40,9 +40,7 @@ export default function ScannerScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* --- HEADER --- */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <ArrowLeft size={24} color={'#444'} strokeWidth={2.5} />
-        </TouchableOpacity>
+        
         <Text style={styles.headerTitle}>Monitor de Escaneo</Text>
         <View style={{ width: 24 }} />
       </View>
