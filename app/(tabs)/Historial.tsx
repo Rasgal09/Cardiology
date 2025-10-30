@@ -69,9 +69,7 @@ export default function HistorialScreen() {
         <SafeAreaView style={styles.container} edges={['top']}>
             {/* --- HEADER PRINCIPAL (Más compacto) --- */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <ArrowLeft size={24} color={Colors.text} strokeWidth={2.5} />
-                </TouchableOpacity>
+                
                 <Text style={styles.headerTitle}>Historial</Text>
                 <BarChart4 size={24} color={Colors.text} />
             </View>

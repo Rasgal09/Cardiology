@@ -53,9 +53,7 @@ export default function CuidadosScreen() {
       
       {/* --- HEADER --- */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <ArrowLeft size={24} color={'#444'} strokeWidth={2.5} />
-        </TouchableOpacity>
+        
         <Text style={styles.headerTitle}>Cuidados del Corazón</Text>
         <View style={{ width: 24 }} />
       </View>
