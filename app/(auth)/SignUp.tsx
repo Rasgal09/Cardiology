@@ -28,10 +28,12 @@ const Colors = {
   textPlaceholder: "#9CA3AF",
   white: "#FFFFFF",
   black: "#000000",
-  error: "#F44336",
+  error: "#F44336", // Color de error
   success: "#059669",
 }
 
+// --- COMPONENTE INPUT MODIFICADO ---
+// Añadimos la prop 'error'
 function Input({
   label,
   placeholder,
@@ -41,6 +43,7 @@ function Input({
   keyboardType = "default",
   autoCapitalize = "sentences",
   autoCorrect = true,
+  error, // Nueva prop
 }: {
   label: string
   placeholder: string
@@ -50,14 +53,20 @@ function Input({
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad"
   autoCapitalize?: "none" | "sentences" | "words" | "characters"
   autoCorrect?: boolean
+  error?: string // Prop de error opcional
 }) {
   const [isFocused, setIsFocused] = useState(false)
+  const hasError = !!error // Convertimos a booleano
 
   return (
     <View style={styles.inputGroup}>
       <Text style={styles.inputLabel}>{label}</Text>
       <TextInput
-        style={[styles.input, isFocused && styles.inputFocused]}
+        style={[
+          styles.input,
+          isFocused && styles.inputFocused, // Estilo cuando está enfocado
+          hasError && styles.inputError, // Estilo cuando hay error
+        ]}
         placeholder={placeholder}
         placeholderTextColor={Colors.textPlaceholder}
         value={value}
@@ -69,6 +78,8 @@ function Input({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
+      {/* Mostrar el mensaje de error si existe */}
+      {hasError && <Text style={styles.errorText}>{error}</Text>}
     </View>
   )
 }
@@ -81,19 +92,89 @@ function Button({ title, onPress }: { title: string; onPress: () => void }) {
   )
 }
 
+// --- PANTALLA DE REGISTRO MODIFICADA ---
 export default function SignUpScreen() {
   const router = useRouter()
-  const [name, setName] = useState("")
+
+  // Nuevos estados para los campos
+  const [nombre, setNombre] = useState("")
+  const [apellidoPaterno, setApellidoPaterno] = useState("")
+  const [apellidoMaterno, setApellidoMaterno] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
-  const handleSignUp = () => {
+  // Estado para manejar los errores de validación
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const handleSignUp = async () => {
+    // --- 1. Lógica de Validación ---
+    const validationErrors: Record<string, string> = {}
+
+    // Validar campos requeridos
+    if (!nombre.trim()) {
+      validationErrors.nombre = "El nombre es requerido."
+    }
+    if (!apellidoPaterno.trim()) {
+      validationErrors.apellidoPaterno = "El apellido paterno es requerido."
+    }
+    if (!email.trim()) {
+      validationErrors.email = "El correo es requerido."
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      validationErrors.email = "El formato de correo no es válido."
+    }
+    if (!password) {
+      validationErrors.password = "La contraseña es requerida."
+    } else if (password.length < 8) {
+      validationErrors.password = "La contraseña debe tener al menos 8 caracteres."
+    }
     if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden")
+      validationErrors.confirmPassword = "Las contraseñas no coinciden."
+    }
+    if (!termsAccepted) {
+      validationErrors.terms = "Debes aceptar los términos y condiciones."
+    }
+
+    // --- 2. Actualizar estado de errores ---
+    setErrors(validationErrors)
+
+    // Si hay errores (el objeto no está vacío), detener la ejecución
+    if (Object.keys(validationErrors).length > 0) {
       return
     }
-    router.replace("/(tabs)/Home")
+
+    const newUser = {
+      name: nombre.trim(),
+      last_name_f: apellidoPaterno.trim(),
+      last_name_m: apellidoMaterno.trim() || undefined,
+      email: email.trim().toLowerCase(),
+      password,
+    }
+
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_URL_BACK}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        alert(errorData.message || "Error al crear la cuenta. Por favor, intenta de nuevo.")
+        return
+      }
+
+      const data = await response.json()
+      console.log("Usuario registrado:", data)
+
+      router.replace("/(tabs)/Home")
+    } catch (error) {
+      console.error("Error de red en el registro:", error)
+      alert("Ocurrió un error de red. Por favor, verifica tu conexión.")
+    }
   }
 
   return (
@@ -112,35 +193,83 @@ export default function SignUpScreen() {
 
             <View style={styles.formSection}>
               <View style={styles.formCard}>
+                {/* --- NUEVOS CAMPOS --- */}
                 <Input
-                  label="Correo electrónico"
-                  placeholder="messielmejor@email.com"
+                  label="Nombre *"
+                  placeholder="Escribe tu nombre"
+                  value={nombre}
+                  onChangeText={setNombre}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  error={errors.nombre}
+                />
+                <Input
+                  label="Apellido Paterno *"
+                  placeholder="Escribe tu apellido paterno"
+                  value={apellidoPaterno}
+                  onChangeText={setApellidoPaterno}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  error={errors.apellidoPaterno}
+                />
+                <Input
+                  label="Apellido Materno"
+                  placeholder="Opcional"
+                  value={apellidoMaterno}
+                  onChangeText={setApellidoMaterno}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  error={errors.apellidoMaterno}
+                />
+
+                {/* --- CAMPOS EXISTENTES (con asterisco y error) --- */}
+                <Input
+                  label="Correo electrónico *"
+                  placeholder="tu@email.com"
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
+                  error={errors.email}
                 />
-
                 <Input
-                  label="Contraseña"
+                  label="Contraseña *"
                   placeholder="Mínimo 8 caracteres"
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry
                   autoCapitalize="none"
                   autoCorrect={false}
+                  error={errors.password}
                 />
-
                 <Input
-                  label="Confirmar contraseña"
+                  label="Confirmar contraseña *"
                   placeholder="Repite tu contraseña"
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   secureTextEntry
                   autoCapitalize="none"
                   autoCorrect={false}
+                  error={errors.confirmPassword}
                 />
+
+                {/* --- NUEVO CHECKBOX DE TÉRMINOS --- */}
+                <View style={styles.termsRow}>
+                  <TouchableOpacity
+                    style={[styles.checkbox, termsAccepted && styles.checkboxActive]}
+                    onPress={() => setTermsAccepted(!termsAccepted)}
+                    activeOpacity={0.7}
+                  >
+                    {termsAccepted && <Text style={styles.checkboxCheck}>✓</Text>}
+                  </TouchableOpacity>
+                  <Text style={styles.termsText}>
+                    Acepto los <Text style={styles.termsLink}>Términos y Condiciones</Text> y la{" "}
+                    <Text style={styles.termsLink}>Política de Privacidad</Text>
+                  </Text>
+                </View>
+                {/* Mensaje de error para el checkbox */}
+                {errors.terms && <Text style={[styles.errorText, { marginBottom: 16 }]}>{errors.terms}</Text>}
 
                 <View style={styles.buttonContainer}>
                   <Button title="Crear Cuenta" onPress={handleSignUp} />
@@ -154,10 +283,7 @@ export default function SignUpScreen() {
                 </View>
               </View>
 
-              <Text style={styles.termsText}>
-                Al crear una cuenta, aceptas nuestros <Text style={styles.termsLink}>Términos y Condiciones</Text> y{" "}
-                <Text style={styles.termsLink}>Política de Privacidad</Text>
-              </Text>
+              {/* El texto de términos y condiciones ahora está DENTRO del 'formCard' junto al checkbox */}
             </View>
           </View>
         </ScrollView>
@@ -166,6 +292,7 @@ export default function SignUpScreen() {
   )
 }
 
+// --- ESTILOS ACTUALIZADOS ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -242,6 +369,17 @@ const styles = StyleSheet.create({
     borderColor: Colors.inputBorderFocused,
     borderWidth: 2,
   },
+  // --- NUEVO ESTILO DE ERROR PARA INPUT ---
+  inputError: {
+    borderColor: Colors.error,
+    borderWidth: 2,
+  },
+  // --- NUEVO ESTILO PARA TEXTO DE ERROR ---
+  errorText: {
+    color: Colors.error,
+    fontSize: 12,
+    marginTop: 5,
+  },
   buttonContainer: {
     marginTop: 4,
   },
@@ -283,13 +421,37 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontWeight: "700",
   },
-  termsText: {
+  // --- NUEVOS ESTILOS PARA CHECKBOX Y TÉRMINOS ---
+  termsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4, // Reducido el margen superior
+    marginBottom: 8, // Espacio antes del botón o del error
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: Colors.inputBorder,
+    borderRadius: 4,
+    marginRight: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  checkboxActive: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  checkboxCheck: {
+    color: Colors.white,
+    fontWeight: "bold",
     fontSize: 12,
+  },
+  termsText: {
+    fontSize: 13,
     color: Colors.textSecondary,
-    textAlign: "center",
-    marginTop: 28,
     lineHeight: 18,
-    paddingHorizontal: 16,
+    flex: 1, // Para que el texto se ajuste (wrap)
   },
   termsLink: {
     color: Colors.primary,
