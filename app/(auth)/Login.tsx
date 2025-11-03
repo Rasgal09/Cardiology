@@ -94,14 +94,17 @@ export default function LoginScreen() {
         return;
       }
 
-  
-
       login(user);
       router.replace("/(tabs)/Home");
       return;
     } else {
       const user = await loginMobile(formData);
-       console.log("Usuario web autenticado:", user)
+
+      if(user.detail){
+        alert("Error al iniciar sesión: " + user.detail);
+        return;
+      }
+
       login(user);
       router.replace("/(tabs)/Home");
       return;
