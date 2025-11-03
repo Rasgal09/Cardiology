@@ -6,9 +6,8 @@ import { ArrowLeft, Phone, PhoneOff, LucideIcon } from 'lucide-react-native'; //
 import { Colors } from '../constants/Colors';
 import { Audio } from 'expo-av';
 
-// 🌟 1. IMPORTAR EL ARCHIVO DE AUDIO 🌟
-// Asegúrate de que esta ruta sea correcta para tu proyecto
-const CALL_SOUND = require('../../assets/audio/llamadodeemergencia.mp3'); 
+
+//const CALL_SOUND = require('../../assets/audio/llamadodeemergencia.mp3'); 
 
 export default function EmergenciaScreen() {
     const router = useRouter();
