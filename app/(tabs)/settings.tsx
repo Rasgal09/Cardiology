@@ -1,14 +1,21 @@
+// SettingsScreen.tsx
+
 // React, React Native y Expo
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Funciones y hooks
 import { useAuth } from '../context/AuthContext';
+// SIMULACIÓN de funciones de actualización (NO REALES)
+import { loginWeb, loginMobile } from '../lib/auth'; // Usaremos estas funciones simuladas como base
+
+// Componentes
+import { UpdateFieldModal } from '../components/UpdateFieldModal'; // 🌟 Importamos el nuevo componente
 
 // Estilos y constantes
-import { Colors } from '../constants/Colors';
+import { Colors } from '../constants/Colors'; // Asumo que esta es la paleta original
 
 // Librerías
 import { 
@@ -32,24 +39,36 @@ export default function SettingsScreen() {
     const router = useRouter();
     const { logout } = useAuth();
 
+    // 🌟 ESTADOS PARA EL MODAL DE ACTUALIZACIÓN 🌟
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [modalType, setModalType] = useState<'email' | 'password'>('email');
+
     // ------------------------------------------
-    // FUNCIONES DE MANEJO DE DATOS (PREPARADAS)
+    // FUNCIONES DE MANEJO DE DATOS
     // ------------------------------------------
 
-    const handleUpdateProfile = (setting: string) => {
-        // COMENTARIO: En una aplicación real, aquí se abriría un modal o una nueva pantalla 
-        // con un formulario para que el usuario ingrese la nueva información (ej. nuevo email).
+    const openUpdateModal = (type: 'email' | 'password') => {
+        setModalType(type);
+        setModalVisible(true);
+    };
+
+    /**
+     * Función que SIMULA la lógica de actualizar un campo.
+     * En una app real, esta función llamaría a tu API de backend.
+     * @param type 'email' o 'password'
+     * @param value El nuevo valor a guardar
+     * @returns Promise<boolean> - true si la actualización es exitosa.
+     */
+    const handleUpdateApi = async (type: 'email' | 'password', value: string): Promise<boolean> => {
+        // SIMULACIÓN DE LLAMADA A API
+        console.log(`Intentando actualizar ${type} a: ${value}`);
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simula un retraso de red
         
-        // El botón 'Guardar' dentro de ese formulario llamaría a la API:
-        
-        // EJEMPLO DE LÓGICA (Aún no funcional):
-        // try {
-        //    await database.users.update(setting, newValue); // ⬅️ LÓGICA DE BASE DE DATOS / BACKEND
-        //    Alert.alert("Éxito", `${setting} actualizado correctamente.`);
-        // } catch (error) {
-        //    Alert.alert("Error", "No se pudo actualizar la información.");
-        // }
-        Alert.alert('Funcionalidad Pendiente', `Abrir formulario para ${setting}.`);
+        // En una app real, aquí se enviarían la contraseña actual y el nuevo valor
+        // al backend. Si el backend responde 200/204 y la contraseña es correcta, devuelve true.
+
+        // Por ahora, siempre devolvemos true para que el flujo de UI funcione.
+        return true; 
     };
 
     const handleLogout = () => {
@@ -92,13 +111,15 @@ export default function SettingsScreen() {
                     <SettingItem 
                         title="Cambiar Correo Electrónico" 
                         icon={Mail} 
-                        onPress={() => handleUpdateProfile('Correo')}
+                        // 🌟 LLAMA A LA FUNCIÓN QUE ABRE EL MODAL 🌟
+                        onPress={() => openUpdateModal('email')}
                     />
                     <SettingItem 
                         title="Cambiar Contraseña" 
                         icon={Lock} 
-                        onPress={() => handleUpdateProfile('Contraseña')}
-                        isLast={true} // Marca el último ítem para no tener separador
+                        // 🌟 LLAMA A LA FUNCIÓN QUE ABRE EL MODAL 🌟
+                        onPress={() => openUpdateModal('password')}
+                        isLast={true}
                     />
                 </View>
 
@@ -108,12 +129,12 @@ export default function SettingsScreen() {
                     <SettingItem 
                         title="Notificaciones" 
                         icon={Bell} 
-                        onPress={() => handleUpdateProfile('Notificaciones')}
+                        onPress={() => Alert.alert('Funcionalidad Pendiente', 'Abrir ajustes de Notificaciones')}
                     />
                     <SettingItem 
                         title="Permisos de Dispositivo" 
                         icon={CheckCircle} 
-                        onPress={() => handleUpdateProfile('Permisos')}
+                        onPress={() => Alert.alert('Funcionalidad Pendiente', 'Abrir ajustes de Permisos')}
                         isLast={true}
                     />
                 </View>
@@ -145,9 +166,15 @@ export default function SettingsScreen() {
                 </TouchableOpacity>
 
             </ScrollView>
-            {/* COMENTARIO: La Navbar no siempre se muestra en la pantalla de Configuración. 
-               Si quieres ocultarla, simplemente no la renderices aquí. */}
-            {/* <Navbar /> */}
+            
+            {/* 🌟 MODAL DE ACTUALIZACIÓN DE CAMPO 🌟 */}
+            {isModalVisible && (
+                <UpdateFieldModal 
+                    fieldType={modalType}
+                    onClose={() => setModalVisible(false)}
+                    onUpdate={handleUpdateApi} // Lógica de API simulada
+                />
+            )}
         </SafeAreaView>
     );
 }
@@ -179,7 +206,7 @@ const styles = StyleSheet.create({
     // --- SCROLL CONTENT ---
     scrollContent: {
         padding: 20,
-        paddingBottom: 40, // Espacio al final del scroll
+        paddingBottom: 40, 
     },
     // --- SECCIONES Y TARJETAS ---
     sectionTitle: {
