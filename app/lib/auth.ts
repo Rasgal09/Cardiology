@@ -74,6 +74,8 @@ export const loginMobile = async(formData: FormData) => {
 
     const user = await userData.json();
 
+    console.log("Datos del usuario móvil obtenidos:", user);
+
     return user;
   } catch (error) {
     console.error("Error al iniciar sesión en móvil: ", error);
