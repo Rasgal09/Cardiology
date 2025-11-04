@@ -86,29 +86,16 @@ export default function LoginScreen() {
     formData.append("username", email);
     formData.append("password", password);
 
-    if( Platform.OS === "web"){
-      const user = await loginWeb(formData);
+    const user = Platform.OS === "web" ? await loginWeb(formData) : await loginMobile(formData);
 
-      if(user.detail){
-        alert("Error al iniciar sesión: " + user.detail);
-        return;
-      }
-
-      login(user);
-      router.replace("/(tabs)/Home");
-      return;
-    } else {
-      const user = await loginMobile(formData);
-
-      if(user.detail){
-        alert("Error al iniciar sesión: " + user.detail);
-        return;
-      }
-
-      login(user);
-      router.replace("/(tabs)/Home");
+    if(user.detail || !user){
+      alert("Error al iniciar sesión, vuelva intentarlo más tarde");
       return;
     }
+
+    login(user);
+    router.replace("/(tabs)/Home");
+    return;
   };
 
   return (

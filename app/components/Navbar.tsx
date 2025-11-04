@@ -1,11 +1,11 @@
+import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { usePathname, useRouter } from 'expo-router';
-import { Activity, Ambulance, Home, Shield, Stethoscope, LucideIcon } from 'lucide-react-native';
+import { Activity, Ambulance, Home, LucideIcon, Shield, Stethoscope } from 'lucide-react-native';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View, Animated } from 'react-native';
+import { Animated, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
-import { Colors } from '../constants/Colors'; 
+import { Colors } from '../constants/Colors';
 
 // --- 1. Constantes de Diseño y Configuración ---
 const ICON_SIZE = 28;
@@ -132,13 +132,19 @@ export default function Navbar() {
 // --- 5. Estilos Ajustados (Visibilidad y Estilo de Círculo Degradado) ---
 const styles = StyleSheet.create({
     container: {
+        // Pin the navbar to the bottom. Use fixed on web so it stays attached
+        position: Platform.OS === 'web' ? 'fixed' : 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
         // 🌟 Sombra fuerte para asegurar la visibilidad sobre fondo blanco 🌟
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -5 }, 
-        shadowOpacity: 0.3, // MUY visible
+        shadowOpacity: 0.3,
         shadowRadius: 10, 
         elevation: 15, 
         backgroundColor: 'transparent',
+        zIndex: 999,
     },
     navbarBackground: {
         backgroundColor: Colors.white,

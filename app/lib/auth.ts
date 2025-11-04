@@ -52,7 +52,7 @@ export const loginMobile = async(formData: FormData) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error(errorData);
+      console.error("Error al iniciar sesión móvil: ", errorData);
       return false;
     }
 
@@ -68,17 +68,14 @@ export const loginMobile = async(formData: FormData) => {
 
     if (!userData.ok) {
       const errorData = await userData.json();
-      console.error(errorData);
+      console.error("Error al obtener los datos del usuario móvil: ", errorData);
       return false;
     }
 
     const user = await userData.json();
 
-    console.log("Datos del usuario móvil obtenidos:", user);
-
     return user;
   } catch (error) {
-    console.error("Error al iniciar sesión en móvil: ", error);
     return false;
   }
 };
