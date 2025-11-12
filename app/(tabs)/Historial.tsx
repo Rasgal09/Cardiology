@@ -1,11 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, BarChart4, ChevronLeft, ChevronRight, Download, HeartPulse } from 'lucide-react-native';
-import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { BarChart4, ChevronLeft, ChevronRight, Download, HeartPulse } from 'lucide-react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Navbar from '../components/Navbar';
 import { Colors } from '../constants/Colors';
+import { getToken } from '../lib/auth';
 
 // --- UTILIDADES DEL CALENDARIO (sin cambios, empieza en Domingo) ---
 const WEEK_DAYS = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
@@ -42,11 +43,36 @@ export default function HistorialScreen() {
     const router = useRouter();
     const [currentDate, setCurrentDate] = useState(new Date()); 
 
-    const recordings = [
-        { id: 1, date: '12-Oct-2025', time: '12:00 pm', status: 'Realizado en reposo', icon: HeartPulse },
-        { id: 2, date: '12-Oct-2025', time: '1:30 pm', status: 'Actividad física', icon: HeartPulse },
-        { id: 3, date: '11-Oct-2025', time: '8:00 am', status: 'Realizado en reposo', icon: HeartPulse },
-    ];
+    const [recordings, setRecordings] = useState<Array<{ id: number; processed_at: string | null; filename: string }>>([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        let mounted = true;
+        const fetchSummary = async () => {
+            setLoading(true);
+            try {
+                const base = process.env.EXPO_PUBLIC_URL_BACK;
+                if (!base) throw new Error('EXPO_PUBLIC_URL_BACK no configurada');
+                const url = `${base}/analysis/summary`;
+                const options: any = { method: 'GET' };
+                const token = await getToken().catch(() => null);
+                if (token) options.headers = { Authorization: `Bearer ${token}` };
+                else options.credentials = 'include';
+
+                const res = await fetch(url, options);
+                console.log('Fetch summary response:', res);
+                if (!res.ok) throw new Error('Error fetching analysis summary');
+                const data = await res.json();
+                if (mounted) setRecordings(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.warn('fetchSummary error', err);
+            } finally {
+                if (mounted) setLoading(false);
+            }
+        };
+        fetchSummary();
+        return () => { mounted = false; };
+    }, []);
 
     const goToPreviousMonth = () => {
         const newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
@@ -140,25 +166,29 @@ export default function HistorialScreen() {
                 {/* --- Registros --- */}
                 <Text style={styles.recordingsSectionTitle}>Registros ({recordings.length})</Text>
                 <View style={styles.recordingsList}>
-                    {recordings.map((recording) => (
-                        <TouchableOpacity
-                            key={recording.id}
-                            style={styles.recordingCard}
-                            onPress={() => router.push('/Individual')}
-                            activeOpacity={0.8}
-                        >
-                            <View style={styles.recordingIconContainer}>
-                                <recording.icon size={24} color={Colors.primary} strokeWidth={2} />
-                            </View>
-                            
-                            <View style={styles.recordingInfo}>
-                                <Text style={styles.recordingTitle}>Medición: {recording.date}</Text>
-                                <Text style={styles.recordingStatus}>{recording.status} | {recording.time}</Text>
-                            </View>
+                    {loading ? (
+                        <ActivityIndicator color={Colors.primary} style={{ marginTop: 8 }} />
+                    ) : (
+                        recordings.map((r) => (
+                            <TouchableOpacity
+                                key={r.id}
+                                style={styles.recordingCard}
+                                onPress={() => router.push(`/Individual?result_id=${r.id}`)}
+                                activeOpacity={0.8}
+                            >
+                                <View style={styles.recordingIconContainer}>
+                                    <HeartPulse size={24} color={Colors.primary} strokeWidth={2} />
+                                </View>
+                                
+                                <View style={styles.recordingInfo}>
+                                    <Text style={styles.recordingTitle}>Archivo: {r.filename}</Text>
+                                    <Text style={styles.recordingStatus}>{r.processed_at ? new Date(r.processed_at).toLocaleString() : 'Pendiente'}</Text>
+                                </View>
 
-                            <ChevronRight size={20} color={Colors.darkGray} />
-                        </TouchableOpacity>
-                    ))}
+                                <ChevronRight size={20} color={Colors.darkGray} />
+                            </TouchableOpacity>
+                        ))
+                    )}
                 </View>
             </ScrollView>
 

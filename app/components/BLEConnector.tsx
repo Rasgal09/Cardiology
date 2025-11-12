@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type Props = {
   serviceUuid?: string;
@@ -48,30 +48,114 @@ export default function BLEConnector({
       console.error('Web Bluetooth API not available in this browser');
       return;
     }
+
+    // Helper: try to request device with several strategies
+    const tryRequestDevice = async () => {
+      const attempts = [
+        // Prefer filter by service UUID (cleanest when ESP32 advertises it)
+        { filters: [{ services: [serviceUuid] }], optionalServices: [serviceUuid] },
+        // Try namePrefix / name (common for ESP32 boards that include "ESP" or "ESP32" in the device name)
+        { filters: [{ namePrefix: 'ESP' }], optionalServices: [serviceUuid] },
+        { filters: [{ name: 'ESP32' }], optionalServices: [serviceUuid] },
+        // Fallback: ask user for any device but request our service as optional
+        { acceptAllDevices: true, optionalServices: [serviceUuid] },
+      ];
+
+      for (const opts of attempts) {
+        try {
+          // requestDevice must be called inside a user gesture (button press)
+          // @ts-ignore
+          const device = await (navigator as any).bluetooth.requestDevice(opts);
+          return device;
+        } catch (err: any) {
+          // If the user explicitly cancelled the chooser, stop trying and rethrow
+          const name = err && (err.name || err.code || err.message);
+          if (name === 'NotFoundError' || (err && /cancel/i.test(err.message || ''))) {
+            // continue to next strategy (user may have closed dialog); do not throw immediately
+            console.warn('requestDevice canceled or not found for strategy, trying next if available', err);
+            continue;
+          }
+          console.warn('requestDevice attempt failed, trying next strategy:', err);
+        }
+      }
+      throw new Error('No device selected or Bluetooth request failed.');
+    };
+
     try {
       setStatus('scanning');
-      const options: any = {
-        filters: [{ services: [serviceUuid] }],
-        optionalServices: [serviceUuid],
-      };
-      const device = await (navigator as any).bluetooth.requestDevice(options);
+      const device = await tryRequestDevice();
+      if (!device) throw new Error('No device returned from requestDevice.');
+
       deviceRef.current = device;
       setStatus('connecting');
-      const server = await device.gatt.connect();
+
+      // Some implementations provide .gatt on the device directly
+      const server = await (device.gatt || device).connect();
       const service = await server.getPrimaryService(serviceUuid);
       const char = await service.getCharacteristic(pcmCharUuid);
-      await char.startNotifications();
-      char.addEventListener('characteristicvaluechanged', (ev: any) => {
-        const dv: DataView = ev.target.value; // DataView
-        // Copy into Int16Array
-        const buffer = dv.buffer.slice(dv.byteOffset, dv.byteOffset + dv.byteLength);
+
+      // Handler: normalize value retrieval from event
+      const handleValue = (ev: any) => {
+        // Web Bluetooth delivers a DataView at ev.target.value or ev.currentTarget.value
+        const dv: DataView | undefined = ev?.target?.value ?? ev?.currentTarget?.value;
+        if (!dv) return;
+        // Copy the exact ArrayBuffer slice used by the DataView
+        const byteOffset = (dv as any).byteOffset ?? 0;
+        const byteLength = (dv as any).byteLength ?? dv.byteLength;
+        const buffer = dv.buffer.slice(byteOffset, byteOffset + byteLength);
+        // Interpret as 16-bit signed PCM
         const samples = new Int16Array(buffer);
         if (onPCMFrame) onPCMFrame(samples);
-      });
-      device.addEventListener('gattserverdisconnected', () => {
+      };
+
+      await char.startNotifications();
+      // Use both addEventListener and oncharacteristicvaluechanged for compatibility
+      try {
+        char.addEventListener('characteristicvaluechanged', handleValue);
+      } catch (e) {
+        // Fallback
+        // @ts-ignore
+        char.oncharacteristicvaluechanged = handleValue;
+      }
+
+      // Disconnect handling with optional reconnect attempts
+      let reconnectAttempts = 0;
+      const maxReconnect = 3;
+      const onDisconnected = async () => {
         setStatus('idle');
         if (onDisconnected) onDisconnected();
-      });
+        // Try simple reconnect strategy a limited number of times
+        if (reconnectAttempts < maxReconnect) {
+          reconnectAttempts++;
+          console.warn(`Device disconnected, attempt reconnect ${reconnectAttempts}/${maxReconnect}`);
+          setTimeout(async () => {
+            try {
+              setStatus('connecting');
+              // try to reconnect to the same device
+              const srv = await (device.gatt || device).connect();
+              const svc = await srv.getPrimaryService(serviceUuid);
+              const ch = await svc.getCharacteristic(pcmCharUuid);
+              await ch.startNotifications();
+              // reattach handler
+              try {
+                ch.addEventListener('characteristicvaluechanged', handleValue);
+              } catch (e) {
+                // @ts-ignore
+                ch.oncharacteristicvaluechanged = handleValue;
+              }
+              setStatus('connected');
+              if (onConnected) onConnected();
+              reconnectAttempts = 0;
+            } catch (err) {
+              console.warn('Reconnect failed:', err);
+              setStatus('idle');
+            }
+          }, 1000 * reconnectAttempts); // simple backoff
+        }
+      };
+
+      device.addEventListener('gattserverdisconnected', onDisconnected);
+
       setStatus('connected');
       if (onConnected) onConnected();
     } catch (err) {
@@ -167,9 +251,24 @@ export default function BLEConnector({
   return (
     <View style={styles.container}>
       <Text style={styles.statusText}>BLE: {status}</Text>
-      <TouchableOpacity style={styles.button} onPress={handleConnect}>
-        <Text style={styles.buttonText}>{status === 'connected' ? 'Disconnect' : 'Connect BLE'}</Text>
-      </TouchableOpacity>
+      {Platform.OS !== 'web' && !bleManagerRef.current ? (
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: '#b33', marginBottom: 8, textAlign: 'center' }}>
+            Native BLE not available — install and link `react-native-ble-plx` to use BLE on device.
+          </Text>
+          <TouchableOpacity style={[styles.button, styles.buttonDisabled]} disabled>
+            <Text style={[styles.buttonText, styles.buttonTextDisabled]}>Connect BLE</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={[styles.button, (status === 'scanning' || status === 'connecting') && styles.buttonDisabled]}
+          onPress={handleConnect}
+          disabled={status === 'scanning' || status === 'connecting'}
+        >
+          <Text style={styles.buttonText}>{status === 'connected' ? 'Disconnect' : 'Connect BLE'}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -179,4 +278,6 @@ const styles = StyleSheet.create({
   statusText: { fontSize: 13, color: '#444', marginBottom: 6 },
   button: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: 8, backgroundColor: '#ef5350' },
   buttonText: { color: 'white', fontWeight: '700' },
+  buttonDisabled: { backgroundColor: '#ddd' },
+  buttonTextDisabled: { color: '#999' },
 });
