@@ -1,0 +1,1 @@
+// Logica de BLE movida a un componente separado para mejorar la legibilidad
